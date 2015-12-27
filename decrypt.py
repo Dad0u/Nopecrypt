@@ -49,10 +49,61 @@ def dechiffr(M):
     #    print("Pouet")
     return bytes(S)             # PAS FORCEMENT DE LONGUEUR l !
 
-l = 8       #Valeurs de test
-nom_source = "out.dea"
-key = "1234568"
-nom_dest = "out.txt" #---
+
+l = ''      #-----------Début du prompt utilisateur
+print('Profondeur ? (déf:8)')
+input(l)
+try:
+    l = int(l)
+except:
+    l = 8
+if l < 1:
+    l = 8
+
+print('nom/chemin du ficher ?')
+nom_source = input()
+try:
+    f = open(nom_source,'r')
+    f.close()
+except:
+    print('Impossible d\'ouvrir le fichier à déchiffrer')
+    exit(-1)
+    
+print('Saisir la clé (s) ou utilier un fichier (f): ')
+choix = ''
+while choix != 's' and choix != 'f':
+    choix = input()
+if choix == 's':
+    print('Veuillez taper la clé:')
+    key = input()
+else:
+    print('Veuillez saisir l\'adresse de la clé:')
+    key_addr = input()
+    try:
+        f = open(key_addr)
+        key = f.read()
+    except:
+        print('Impossible d\'ouvrir le fichier clé')
+        exit(-1)
+print('Fichier à écrire ? (défaut: out):')
+
+nom_dest = input()
+if nom_dest == '':
+    nom_dest = 'out'
+print('input: {}'.format(nom_source))
+print('key: {}'.format(key))
+print('depth: {}'.format(l))
+print('output: {}'.format(nom_dest))
+print('Confirmer les paramètres (y/n)?')
+ok = input()
+if ok.lower() not in ['y','o']:
+    print("Annulation.")
+    exit(0)               #---------- Fin du prompt utilisateur
+
+#l = 8       #Valeurs de test
+#nom_source = "out.dea"
+#key = "1234568"
+#nom_dest = "out.txt" #---
 
 while len(key) < l*(l-1): # Pour avoir une clé de la bonne longueur
     key +=key
@@ -85,8 +136,8 @@ for i in read_chunk_backward(nom_source,l):    # Boucle principale (déchiffrage
     M[0] = d
     try:
         dest.seek(-2*l,1)
-    except:
-        print("oups!")
+    except: #Rentre dans ce cas si lsource % l == 0 car il y a un tour de moins à faire. (pas de problème)
+        pass
     if first:
         first = False
         dest.seek(8-reste,1)

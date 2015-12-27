@@ -37,62 +37,62 @@ def chiffr(M):
     #    print("Pouet")
     return bytes(S)             # PAS FORCEMENT DE LONGUEUR l !
     
-if False:    # Pour tester le programme
-    l = ''      #-----------Début du prompt utilisateur
-    print('Profondeur ? (déf:8)')
-    input(l)
-    try:
-        l = int(l)
-    except:
-        l = 8
-    if l < 1:
-        l = 8
+#if False:    # Pour tester le programme
+l = ''      #-----------Début du prompt utilisateur
+print('Profondeur ? (déf:8)')
+input(l)
+try:
+    l = int(l)
+except:
+    l = 8
+if l < 1:
+    l = 8
 
-    print('nom/chemin du ficher ?')
-    nom_source = input()
+print('nom/chemin du ficher ?')
+nom_source = input()
+try:
+    f = open(nom_source,'r')
+    f.close()
+except:
+    print('Impossible d\'ouvrir le fichier à chiffrer')
+    exit(-1)
+    
+print('Saisir la clé (s) ou utilier un fichier (f): ')
+choix = ''
+while choix != 's' and choix != 'f':
+    choix = input()
+if choix == 's':
+    print('Veuillez taper la clé:')
+    key = input()
+else:
+    print('Veuillez saisir l\'adresse de la clé:')
+    key_addr = input()
     try:
-        f = open(nom_source,'r')
-        f.close()
+        f = open(key_addr)
+        key = f.read()
     except:
-        print('Impossible d\'ouvrir le fichier à chiffrer')
+        print('Impossible d\'ouvrir le fichier clé')
         exit(-1)
-        
-    print('Saisir la clé (s) ou utilier un fichier (f): ')
-    choix = ''
-    while choix != 's' and choix != 'f':
-        choix = input()
-    if choix == 's':
-        print('Veuillez taper la clé:')
-        key = input()
-    else:
-        print('Veuillez saisir l\'adresse de la clé:')
-        key_addr = input()
-        try:
-            f = open(key_addr)
-            key = f.read()
-        except:
-            print('Impossible d\'ouvrir le fichier clé')
-            exit(-1)
-    print('Fichier à écrire ? (défaut: out.dea):')
+print('Fichier à écrire ? (défaut: out.dea):')
 
-    nom_dest = input()
-    if nom_dest == '':
-        nom_dest = 'out.dea'
-    print('input: {}'.format(nom_source))
-    print('key: {}'.format(key))
-    print('depth: {}'.format(l))
-    print('output: {}'.format(nom_dest))
-    print('Confirmer les paramètres (y/n)?')
-    ok = input()
-    if ok.lower() not in ['y','o']:
-        print("Annulation.")
-        exit(0)               #---------- Fin du prompt utilisateur
+nom_dest = input()
+if nom_dest == '':
+    nom_dest = 'out.dea'
+print('input: {}'.format(nom_source))
+print('key: {}'.format(key))
+print('depth: {}'.format(l))
+print('output: {}'.format(nom_dest))
+print('Confirmer les paramètres (y/n)?')
+ok = input()
+if ok.lower() not in ['y','o']:
+    print("Annulation.")
+    exit(0)               #---------- Fin du prompt utilisateur
 
 
-l = 8       #Valeurs de test
-nom_source = "a.txt"
-key = "1234568"
-nom_dest = "out.dea" #---
+#l = 8       #Valeurs de test
+#nom_source = "a.txt"
+#key = "1234568"
+#nom_dest = "out.dea" #---
 
 while len(key) < l*(l-1): # Pour avoir une clé de la bonne longueur
     key +=key
