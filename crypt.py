@@ -35,9 +35,9 @@ def chiffr(M):
                 pause()
     #if len(M[0]) != 8:
     #    print("Pouet")
-    return bytes(S)             # PAS FORCEMENT DE LONGUEUR 8 !
+    return bytes(S)             # PAS FORCEMENT DE LONGUEUR l !
     
-if False:    
+if False:    # Pour tester le programme
     l = ''      #-----------Début du prompt utilisateur
     print('Profondeur ? (déf:8)')
     input(l)
@@ -84,7 +84,8 @@ if False:
     print('output: {}'.format(nom_dest))
     print('Confirmer les paramètres (y/n)?')
     ok = input()
-    if ok not in ['y','Y','o','O']:
+    if ok.lower() not in ['y','o']:
+        print("Annulation.")
         exit(0)               #---------- Fin du prompt utilisateur
 
 
@@ -93,14 +94,11 @@ nom_source = "a.txt"
 key = "1234568"
 nom_dest = "out.dea" #---
 
-
-
-
 while len(key) < l*(l-1): # Pour avoir une clé de la bonne longueur
     key +=key
 key = key[:l*(l-1)]
 
-print(key)
+#print(key)
 source = open(nom_source,"rb")
 dest = open(nom_dest,"wb")
 M = []
@@ -119,9 +117,6 @@ for i in key:                       # Chiffrage de la fin, en utilisant la clé
         M = decale(M,bytes(row,'utf-8'))
         dest.write(chiffr(M))
         row = ''
-        
-
 
 dest.close()
-
 
