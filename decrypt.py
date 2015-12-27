@@ -6,16 +6,23 @@ def pause():
     
 def read_chunk_backward(filename, chunksize):
     with open(filename, "rb") as f:
-        f.seek(-l,2)
+        f.seek(0,2)
+        length = f.tell()
+        reste = length % l
+        if reste == 0:
+            reste = l
+        f.seek(-reste,2)
         chunk = f.read(chunksize)
         yield chunk
+        f.seek(-reste-l,2)
         while True:
+            chunk = f.read(chunksize)
+            yield chunk
             try:
                 f.seek(-2*l,1)
             except:
                 break
-            chunk = f.read(chunksize)
-            yield chunk
+            
                 
 def decale_bw(M,bytes):
     global l
@@ -58,7 +65,6 @@ with open(nom_source) as f:    #Calcule la longueur du ficher chiffré
 print("Creation du ficher destination vide...")
 dest=open(nom_dest,"wb")
 dest.write(bytes(lsource))
-
 row = ''
 M = []
 for i in key:                       # Remplissage de la matrice avec la clé
@@ -67,7 +73,24 @@ for i in key:                       # Remplissage de la matrice avec la clé
         M.append(bytes(row,'utf-8'))
         row = ''
 
-print(M)
+reste = lsource % l
+if reste == 0:
+    reste = l
+dest.seek(-reste,2)
+first = True
+for i in read_chunk_backward(nom_source,l):    # Boucle principale (déchiffrage)
+    M = decale_bw(M,i)
+    d = dechiffr(M)
+    dest.write(d)
+    M[0] = d
+    try:
+        dest.seek(-2*l,1)
+    except:
+        print("oups!")
+    if first:
+        first = False
+        dest.seek(8-reste,1)
 
+dest.close()
 
 
